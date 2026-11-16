@@ -18,6 +18,9 @@ local function count_neighbors(grid, x, y)
 	for dy = -1, 1 do
 		for dx = -1, 1 do
 			if not (dx == 0 and dy == 0) then
+				-- トーラスにするための処置．
+				-- Luaは1-originなのでこのように書いたが
+				-- 0-originで計算を考えたほうが理解しやすいと思った
 				local nx = ((x - 1 + dx) % WIDTH) + 1
 				local ny = ((y - 1 + dy) % HEIGHT) + 1
 				count = count + (grid[ny][nx] and 1 or 0)
