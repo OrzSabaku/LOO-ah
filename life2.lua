@@ -1,14 +1,25 @@
 -- NOTE: 多分メタテーブルとメタメソッドがよくわかってないから理解しきれてないと思われる
 -- これつかって色々実装してみるべきかも
-local Board = {} -- この時点でBoardはただの連想配列
--- このダンダーみたいなメンバーはメタメソッドっつうらしくて
--- 存在しないキーを読み取ろうとしたときにフォールバックする先を登録するみたい
-Board.__index = Board
 
+-- この時点でBoardはただの連想配列
+-- 公開用のテーブル
+local Board = {}
+
+local BoardMethods = {}
+
+-- メタテーブルを作るよ．設定用のメタメソッドをまとめとくのがいいっぽい．
+local BoardMeta = {
+	__index = BoardMethods,
+	-- このダンダーみたいなメンバーはメタメソッドっつうらしくて
+	-- 存在しないキーを読み取ろうとしたときにフォールバックする先を登録するみたい
+	-- この場合関数ばっか集めた`BoardMethods`に処理を移譲する感じ
+}
+
+-- 関数のグローバル宣言ではなく
+-- テーブル`Board`に関数を設定している感じ
 function Board.new(width, height)
-	-- 空のテーブルに親テーブルを設定．さらにそれを返す
-	-- 破壊的変更をしない優しいメソッド
-	local self = setmetatable({}, Board)
+	-- メタテーブル（設定用のテーブル）を貼り付けて初期化
+	local self = setmetatable({}, BoardMeta)
 
 	self.width = width
 	self.height = height
@@ -29,7 +40,7 @@ function Board.new(width, height)
 	return self
 end
 
-function Board:_create_empty_grid()
+function BoardMethods:_create_empty_grid()
 	local grid = {}
 	for y = 1, self.height do
 		grid[y] = {}
@@ -40,7 +51,7 @@ function Board:_create_empty_grid()
 	return grid
 end
 
-function Board:count_neighbors(x, y)
+function BoardMethods:count_neighbors(x, y)
 	local count = 0
 	for dy = -1, 1 do
 		for dx = -1, 1 do
@@ -54,7 +65,7 @@ function Board:count_neighbors(x, y)
 	return count
 end
 
-function Board:next_generation()
+function BoardMethods:next_generation()
 	local next_grid = self:_create_empty_grid()
 	for y = 1, self.height do
 		for x = 1, self.width do
@@ -74,7 +85,7 @@ function Board:next_generation()
 	self.generation = self.generation + 1
 end
 
-function Board:render()
+function BoardMethods:render()
 	io.write("\27[H")
 	print(string.format("Generation: %d", self.generation))
 	for y = 1, self.height do
@@ -86,7 +97,7 @@ function Board:render()
 	end
 end
 
-function Board:seed(coord)
+function BoardMethods:seed(coord)
 	for _, pos in ipairs(coord) do
 		local x, y = pos[1], pos[2]
 		self.grid[y][x] = true
