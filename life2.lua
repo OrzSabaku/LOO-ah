@@ -18,6 +18,12 @@ function Board.new(width, height)
 	-- Ex.
 	-- retrun setmetatable({ width = hikisuu}, Board)
 
+	-- IMPORTANT: というか，別に構文があるわけじゃなくて
+	-- 既存機能の組み合わせでオブジェクト指向プログラミングをやる
+	-- ってのがプロトタイプベースの基本姿勢？
+	-- 実際人によってプロトタイプの書き方が違う
+	-- 気分的にはCで構造体に関数突っ込んで使うDIY感がある
+
 	return self
 end
 
