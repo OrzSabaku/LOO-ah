@@ -41,6 +41,21 @@ function Board.new(width, height)
 	return self
 end
 
+-- ただ冗長なので普段は
+-- ①クラス(new置き場) ＋ ②メソッド置き場 ＋ ③メタテーブル をすべて兼任
+-- させる
+--
+-- local Board = {}
+-- Board.__index = Board
+--
+-- function Board.new(w, h)
+--   return setmetatable({ width = w, height = h }, Board)
+-- end
+--
+-- function Board:step()
+--   print("step called! width=" .. self.width)
+-- end
+
 function BoardMethods:_create_empty_grid()
 	local grid = {}
 	for y = 1, self.height do
