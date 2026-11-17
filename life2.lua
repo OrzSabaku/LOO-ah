@@ -81,24 +81,31 @@ function BoardMethods:count_neighbors(x, y)
 	return count
 end
 
+-- NOTE: この関数はおそらく呼ばれるたびにスタック領域にそこそこ大きなメモリを確保することになる．
 function BoardMethods:next_generation()
 	local next_grid = self:_create_empty_grid()
 	for y = 1, self.height do
 		for x = 1, self.width do
 			local neighbors = self:count_neighbors(x, y)
-			local alive = self.grid[y][x]
-
-			if alive and (neighbors == 2 or neighbors == 3) then
-				next_grid[y][x] = true
-			elseif not alive and neighbors == 3 then
-				next_grid[y][x] = true
-			else
-				next_grid[y][x] = false
-			end
+			next_grid[y][x] = self:_dead_or_alive(neighbors, y, x)
 		end
 	end
 	self.grid = next_grid
 	self.generation = self.generation + 1
+end
+
+-- NOTE: 設定は差し替え可能にしたかった
+-- ストラテジーパターンにすべきかもね
+function BoardMethods:_dead_or_alive(neighbors, y, x)
+	if self.grid[y][x] and (neighbors == 2 or neighbors == 3) then
+		return self.grid[y][x] -- Survival
+	elseif not self.grid[y][x] and neighbors == 3 then
+		return true -- Birth
+	elseif self.grid[y][x] and neighbors >= 4 then
+		return false -- Overpopulation
+	else
+		return false -- Underpopulation
+	end
 end
 
 function BoardMethods:render()
