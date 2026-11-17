@@ -1,21 +1,20 @@
-local array = {}
-
 local function prime(limit)
-	array[1] = false
+	local is_prime = {}
+	for i = 2, limit do
+		is_prime[i] = true
+	end
+
 	for i = 2, math.sqrt(limit) do
-		if array[i] then
+		if is_prime[i] then
 			for j = i * i, limit, i do
-				array[j] = false
+				is_prime[j] = false
 			end
 		end
 	end
+	return is_prime
 end
 
-for i = 1, 100 do
-	array[i] = true
-end
-
-prime(100)
+local array = prime(100)
 
 for i = 1, 100 do
 	io.write(string.format("%3s ", array[i] and i or "---"))
