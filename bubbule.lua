@@ -1,8 +1,8 @@
-local function bubble(table)
-	for _ = 1, #table - 1 do
-		for i = 1, #table - 1 do
-			if table[i] > table[i + 1] then
-				table[i], table[i + 1] = table[i + 1], table[i]
+local function bubble(list)
+	for _ = 1, #list - 1 do
+		for i = 1, #list - 1 do
+			if list[i] > list[i + 1] then
+				list[i], list[i + 1] = list[i + 1], list[i]
 			end
 		end
 	end
