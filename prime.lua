@@ -1,13 +1,11 @@
 local array = {}
 
-local function prime(x)
+local function prime(limit)
 	array[1] = false
-	for i = 1, math.sqrt(x) do
+	for i = 2, math.sqrt(limit) do
 		if array[i] then
-			local j = 2
-			while i * j <= x do
-				array[i * j] = false
-				j = j + 1
+			for j = i * i, limit, i do
+				array[j] = false
 			end
 		end
 	end
