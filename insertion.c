@@ -4,7 +4,7 @@
 #include <time.h>
 
 void insertion(int *ary, size_t size) {
-  for (size_t i = 1; i <= size; i++) {
+  for (size_t i = 1; i < size; i++) {
     size_t j = i;
     int tmp = ary[i];
     while (j > 0 && ary[j - 1] > tmp) {
