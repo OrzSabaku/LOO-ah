@@ -5,11 +5,10 @@
 
 void insertion(int *ary, size_t size) {
   for (size_t i = 1; i < size; i++) {
-    size_t j = i;
+    size_t j;
     int tmp = ary[i];
-    while (j > 0 && ary[j - 1] > tmp) {
+    for (j = i; j > 0 && ary[j - 1] > tmp; j--) {
       ary[j] = ary[j - 1];
-      j--;
     }
     ary[j] = tmp;
   }
